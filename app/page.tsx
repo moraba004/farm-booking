@@ -40,6 +40,15 @@ const statusStyles: Record<DateStatus, string> = {
   sharing_ok: "border-[#9cc6ef] bg-[#eef7ff] text-[#195d91]",
 };
 
+const statusDotStyles: Record<DateStatus, string> = {
+  available: "bg-[#2f5d42]",
+  partially_booked: "bg-[#8a7a2e]",
+  pending: "bg-[#d69b2d]",
+  fully_booked: "bg-[#b93333]",
+  blocked: "bg-[#777]",
+  sharing_ok: "bg-[#1d75b9]",
+};
+
 export default function Home() {
   const [bookings, setBookings] = useState<BookingRow[]>([]);
   const [blockedRanges, setBlockedRanges] = useState<BlockedDateRow[]>([]);
@@ -234,7 +243,7 @@ export default function Home() {
           </p>
         )}
 
-        <section className="rounded-lg bg-white p-4 shadow-xl shadow-[#49643a]/10 sm:p-6">
+        <section className="w-full overflow-hidden rounded-lg bg-white p-3 shadow-xl shadow-[#49643a]/10 sm:p-6">
           <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <button
               type="button"
@@ -280,9 +289,12 @@ export default function Home() {
               Loading calendar...
             </p>
           ) : (
-            <div className="grid grid-cols-7 gap-1.5 text-center sm:gap-2">
+            <div className="grid w-full grid-cols-[repeat(7,minmax(0,1fr))] gap-1 text-center sm:gap-2">
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                <span key={day} className="text-[11px] font-black text-[#6f4f2d] sm:text-sm">
+                <span
+                  key={day}
+                  className="min-w-0 truncate text-[10px] font-black text-[#6f4f2d] sm:text-sm"
+                >
                   {day}
                 </span>
               ))}
@@ -312,17 +324,20 @@ export default function Home() {
                     key={day.dateKey}
                     type="button"
                     onClick={() => openBookingModal(day.dateKey)}
-                    className={`group relative min-h-20 rounded-md border p-2 text-left font-black transition hover:-translate-y-0.5 hover:shadow-md sm:min-h-28 ${statusStyles[status]} ${
+                    className={`group relative min-h-12 min-w-0 rounded-md border p-1 text-center font-black transition hover:-translate-y-0.5 hover:shadow-md sm:min-h-28 sm:p-2 sm:text-left ${statusStyles[status]} ${
                       isSelected ? "ring-4 ring-[#2f5d42]/20" : ""
                     } ${isToday ? "outline outline-2 outline-offset-2 outline-[#2f5d42]" : ""}`}
                   >
-                    <span className="block text-lg sm:text-2xl">{day.dayNumber}</span>
-                    <span className="mt-1 block text-[10px] leading-4 sm:text-xs">
+                    <span className="block text-sm sm:text-2xl">{day.dayNumber}</span>
+                    <span
+                      className={`mx-auto mt-1 block h-1.5 w-1.5 rounded-full sm:hidden ${statusDotStyles[status]}`}
+                    />
+                    <span className="mt-1 hidden text-[10px] leading-4 sm:block sm:text-xs">
                       {statusText[status]}
                     </span>
                     {sharingOk && (
-                      <span className="mt-2 inline-flex rounded-full bg-[#1d75b9] px-2 py-1 text-[10px] font-black text-white">
-                        Sharing OK
+                      <span className="mx-auto mt-1 block h-1.5 w-1.5 rounded-full bg-[#1d75b9] sm:mx-0 sm:mt-2 sm:inline-flex sm:h-auto sm:w-auto sm:px-2 sm:py-1 sm:text-[10px] sm:font-black sm:text-white">
+                        <span className="hidden sm:inline">Sharing OK</span>
                       </span>
                     )}
 
