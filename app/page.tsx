@@ -27,7 +27,7 @@ const bookerNames = [
   "MoRa",
   "Samer",
   "Ahmad",
-  "Hiba",
+  "Abdullah",
   "Other",
 ];
 
